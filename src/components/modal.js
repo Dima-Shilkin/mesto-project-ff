@@ -1,5 +1,5 @@
-export {openModalWindow, closeModalWindow, closePopap}
-import {editModal, windowAddCard} from '../index.js';
+export {openModalWindow, closeModalWindow, closePopap, closePopupOnOverlay}
+import {editModal, windowAddCard, imgModalWindow} from '../index.js';
 
 // функция открытия модального окна
 function openModalWindow(element) {
@@ -20,18 +20,20 @@ function closeModalWindow(element) {
   element.classList.remove('popup_is-opened')
 }
 
-// обработчик закрытия модальных окон при клике по оверлею
-document.addEventListener('click', function(evt) {
-  if (evt.target === editModal || evt.target === windowAddCard) {
-    closeModalWindow(editModal)
-    closeModalWindow(windowAddCard)
-  }
-});
-
 //обработчик закрытия модальных окон при нажатии escape
 document.addEventListener('keydown', function(evt) {
   if (evt.key === 'Escape') {
     closeModalWindow(editModal),
-    closeModalWindow(windowAddCard)
+    closeModalWindow(windowAddCard),
+    closeModalWindow(imgModalWindow)
   }
 });
+
+//функция обработчик закрытия модальных окон по оверлею ПРОБА
+function closePopupOnOverlay(popup) {
+  popup.addEventListener('click', function(evt) {
+    if (evt.target.classList.contains('popup_is-opened')) {
+      closeModalWindow(popup);
+    }
+  })
+};

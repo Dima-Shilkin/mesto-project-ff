@@ -2,7 +2,7 @@ export {createCard, deleteCard, addLike}
 
 import {cardTemplate} from '../index.js';
 
-function createCard(element, deleteCard, addLike) {
+function createCard(element, deleteCard, addLike, openModalImg) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const deleteButton = cardElement.querySelector('.card__delete-button');
   const cardImage = cardElement.querySelector('.card__image');
@@ -12,6 +12,9 @@ function createCard(element, deleteCard, addLike) {
   cardImage.src = element.link;
   cardImage.alt = element.name;
   cardElement.querySelector('.card__title').textContent = element.name;
+  cardImage.addEventListener('click', () => {
+    openModalImg(element.link, element.name)
+  });
   return cardElement;
 };
 
