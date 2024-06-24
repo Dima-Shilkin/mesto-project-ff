@@ -2,15 +2,12 @@ import './pages/index.css';
 
 import {initialCards} from './components/cards.js'
 import {createCard, deleteCard, addLike} from './components/card.js'
-import {openModalWindow, closeModalWindow, closePopap, closePopupOnOverlay} from './components/modal.js'
+import {openModalWindow, closeModalWindow, closePopapOnButton, closePopupOnOverlay} from './components/modal.js'
 
-export {cardTemplate, editModal, windowAddCard, openModalImg, imgModalWindow}
+const cardsContainer = document.querySelector('.places__list');
+const modalsOpen = document.querySelectorAll('.popup'); //находим все попапы
 
-const cardTemplate = document.querySelector('#card-template').content;
-const placesList = document.querySelector('.places__list');
-const openModal = document.querySelectorAll('.popup'); //находим все попапы
-
-const editModal = document.querySelector('.popup_type_edit'); //модальное окно редактирования профиля
+const modalEdit = document.querySelector('.popup_type_edit'); //модальное окно редактирования профиля
 const windowAddCard = document.querySelector('.popup_type_new-card'); //модальное окно добавления карточек
 const imgModalWindow = document.querySelector('.popup_type_image'); //модальное окно с открытой картинкой
 
@@ -21,9 +18,9 @@ const profileDescription = document.querySelector('.profile__description'); // �
 const imgInModal = imgModalWindow.querySelector('.popup__image'); //место куда вставлять картинку
 const popupCaption = imgModalWindow.querySelector('.popup__caption'); //место куда вставлять описание картинки
 
-const formElement = document.forms['edit-profile'];//находим форму редактирования профиля
-const nameInput = formElement.elements.name; // находим элемент формы Имя
-const jobInput = formElement.elements.description; // находим элемент формы Занятие
+const formElementEdit = document.forms['edit-profile'];//находим форму редактирования профиля
+const nameInput = formElementEdit.elements.name; // находим элемент формы Имя
+const jobInput = formElementEdit.elements.description; // находим элемент формы Занятие
 
 const formElementCard = document.forms['new-place'];//находим форму добавления карточек
 const linkInput = formElementCard.elements.link; // находим в этой форме инпут Название
@@ -31,14 +28,14 @@ const placeNameInput = formElementCard.elements['place-name'] // находим 
 
 initialCards.forEach(function (element) {
   const cardElement = createCard(element, deleteCard, addLike, openModalImg);
-  placesList.append(cardElement);
+  cardsContainer.append(cardElement);
 });
 
 // обработчик кнопки открытия модального окна редактирования профиля
 buttonEdit.addEventListener('click', function(evt) {
   nameInput.value = profileTitle.textContent; // эта и нижняя строчка автоматически заполняют элемнт формы значениями
   jobInput.value = profileDescription.textContent; // которые отображаются на странице
-  openModalWindow(editModal);
+  openModalWindow(modalEdit);
  });
 
  //обработчик кнопки открытия модального окна с добавлением карточек
@@ -47,12 +44,12 @@ buttonAdd.addEventListener('click', function(evt) {
 });
 
 // вызов функции, которая навешивает на попам обработчик кнопки закрытия
-closePopap(editModal);
-closePopap(windowAddCard);
-closePopap(imgModalWindow);
+closePopapOnButton(modalEdit);
+closePopapOnButton(windowAddCard);
+closePopapOnButton(imgModalWindow);
 
 // функция обработчик события submit для отправки формы (чтобы изменить имя и род деятельности)
-function handleFormSubmit(evt) {
+function handleFormEdit(evt) {
   evt.preventDefault();
 
   const nameInputValue = nameInput.value;
@@ -61,24 +58,24 @@ function handleFormSubmit(evt) {
   profileTitle.textContent = nameInputValue;
   profileDescription.textContent = jobInputValue;
 
-  closeModalWindow(editModal);
+  closeModalWindow(modalEdit);
  }
 
 // функция обработчик события submit для добавления карточек
-function addCardFormSubmit(evt) {
+function handleFormCard(evt) {
   evt.preventDefault();
   const element = {
     link: linkInput.value,
     name: placeNameInput.value
   }
   const cardCreate = createCard(element, deleteCard, addLike, openModalImg);
-  placesList.prepend(cardCreate);
+  cardsContainer.prepend(cardCreate);
   formElementCard.reset(); // обнуление формы
   closeModalWindow(windowAddCard);
 }
 
-formElement.addEventListener('submit', handleFormSubmit);
-formElementCard.addEventListener('submit',addCardFormSubmit);
+formElementEdit.addEventListener('submit', handleFormEdit);
+formElementCard.addEventListener('submit', handleFormCard);
 
 // функция открытия модального окна большой картинки
 function openModalImg(img, caption) {
@@ -89,6 +86,6 @@ function openModalImg(img, caption) {
 };
 
 // применение функции закрытия модального окна ко всем попапам
-openModal.forEach(function (popup) {
+modalsOpen.forEach(function (popup) {
   closePopupOnOverlay(popup);
 });

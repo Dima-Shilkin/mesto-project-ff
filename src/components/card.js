@@ -1,8 +1,7 @@
 export {createCard, deleteCard, addLike}
 
-import {cardTemplate} from '../index.js';
-
 function createCard(element, deleteCard, addLike, openModalImg) {
+  const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const deleteButton = cardElement.querySelector('.card__delete-button');
   const cardImage = cardElement.querySelector('.card__image');
@@ -23,7 +22,7 @@ function deleteCard(evt) {
   evt.target.closest('.card').remove();
 }
 
-//функция добавления лайка 
+//функция добавления лайка
 function addLike(evt) {
   evt.target.classList.toggle('card__like-button_is-active')
 }

@@ -1,5 +1,5 @@
-export {openModalWindow, closeModalWindow, closePopap, closePopupOnOverlay}
-import {editModal, windowAddCard, imgModalWindow} from '../index.js';
+export {openModalWindow, closeModalWindow, closePopapOnButton, closePopupOnOverlay}
+// import {editModal, windowAddCard, imgModalWindow} from '../index.js';
 
 // функция открытия модального окна
 function openModalWindow(element) {
@@ -8,7 +8,7 @@ function openModalWindow(element) {
 }
 
 //функция, которая навешивает на попап обработчик (для того, чтобы на все кнопки работало закрытие по кнопке)
-function closePopap(popup) {
+function closePopapOnButton(popup) {
   const closeBtn = popup.querySelector('.popup__close')
   closeBtn.addEventListener('click', function(evt) {
     closeModalWindow(popup)
@@ -21,13 +21,15 @@ function closeModalWindow(element) {
 }
 
 //обработчик закрытия модальных окон при нажатии escape
-document.addEventListener('keydown', function(evt) {
-  if (evt.key === 'Escape') {
-    closeModalWindow(editModal),
-    closeModalWindow(windowAddCard),
-    closeModalWindow(imgModalWindow)
+document.addEventListener('keydown', closePopupEsc);
+ 
+//функция закрытия модального окна при нажатии escape
+function closePopupEsc(evt) {
+  const openedPopups = document.querySelector('.popup_is-opened');
+  if (evt.key === 'Escape' && openedPopups) {
+    closeModalWindow(openedPopups);
   }
-});
+};
 
 //функция обработчик закрытия модальных окон по оверлею ПРОБА
 function closePopupOnOverlay(popup) {
