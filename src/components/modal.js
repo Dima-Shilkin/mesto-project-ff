@@ -5,6 +5,7 @@ export {openModalWindow, closeModalWindow, closePopapOnButton, closePopupOnOverl
 function openModalWindow(element) {
   element.classList.add('popup_is-opened')
   element.classList.add('popup_is-animated')
+  document.addEventListener('keydown', closePopupEsc);
 }
 
 //функция, которая навешивает на попап обработчик (для того, чтобы на все кнопки работало закрытие по кнопке)
@@ -18,15 +19,13 @@ function closePopapOnButton(popup) {
  // функция закрытия модального окна
 function closeModalWindow(element) {
   element.classList.remove('popup_is-opened')
+  document.removeEventListener('keydown', closePopupEsc);
 }
 
-//обработчик закрытия модальных окон при нажатии escape
-document.addEventListener('keydown', closePopupEsc);
- 
 //функция закрытия модального окна при нажатии escape
 function closePopupEsc(evt) {
-  const openedPopups = document.querySelector('.popup_is-opened');
-  if (evt.key === 'Escape' && openedPopups) {
+  if (evt.key === 'Escape') {
+    const openedPopups = document.querySelector('.popup_is-opened');
     closeModalWindow(openedPopups);
   }
 };
